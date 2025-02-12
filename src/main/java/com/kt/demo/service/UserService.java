@@ -1,11 +1,12 @@
 package com.kt.demo.service;
 
 import com.kt.demo.domain.User;
-import com.kt.demo.dto.LoginRequest;
+import com.kt.demo.dto.request.ChangeUserInfoRequest;
+import com.kt.demo.dto.request.LoginRequest;
+import com.kt.demo.dto.response.UserInfoResponse;
 import com.kt.demo.repository.UserRepository;
 import jakarta.servlet.http.HttpSession;
 import java.util.List;
-import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -24,12 +25,16 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    public List<User> getAllUsers() {
-        return userRepository.findAll();
+    public List<UserInfoResponse> getAllUsers() {
+        return userRepository.findAll().stream()
+                .map(UserInfoResponse::fromEntity)
+                .toList();
     }
 
-    public Optional<User> getUserById(Long id) {
-        return userRepository.findById(id);
+    public UserInfoResponse getUserInfo(String email) {
+        return userRepository.findByEmail(email)
+                .map(UserInfoResponse::fromEntity)
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 사용자입니다."));
     }
 
     @Transactional
@@ -47,5 +52,23 @@ public class UserService {
                 .orElseThrow(() -> new IllegalArgumentException("로그인 정보가 올바르지 않습니다."));
 
         session.setAttribute("loginUser", request.email());
+    }
+
+    @Transactional
+    public String resetPassword(String email) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 사용자입니다."));
+
+        user.changePassword("newPassword");
+
+        return user.getPassword();
+    }
+
+    @Transactional
+    public void changeUserInfo(String email, ChangeUserInfoRequest request) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 사용자입니다."));
+
+        user.changeUserInfo(request);
     }
 }

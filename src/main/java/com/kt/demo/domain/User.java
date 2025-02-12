@@ -1,5 +1,6 @@
 package com.kt.demo.domain;
 
+import com.kt.demo.dto.request.ChangeUserInfoRequest;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -39,5 +40,13 @@ public class User {
         this.name = name;
         this.email = email;
         this.password = password;
+    }
+
+    public void changePassword(String newPassword) {
+        this.password = newPassword;
+    }
+
+    public void changeUserInfo(ChangeUserInfoRequest request) {
+        this.name = request.name();
     }
 }

@@ -1,4 +1,4 @@
-package com.kt.demo.dto;
+package com.kt.demo.dto.request;
 
 public record LoginRequest(
         String email,

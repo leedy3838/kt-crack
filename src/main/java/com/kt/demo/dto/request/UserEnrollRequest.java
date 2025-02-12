@@ -1,4 +1,4 @@
-package com.kt.demo.dto;
+package com.kt.demo.dto.request;
 
 import com.kt.demo.domain.User;
 
