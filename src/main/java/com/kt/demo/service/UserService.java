@@ -7,6 +7,7 @@ import com.kt.demo.dto.response.UserInfoResponse;
 import com.kt.demo.repository.UserRepository;
 import jakarta.servlet.http.HttpSession;
 import java.util.List;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -59,7 +60,7 @@ public class UserService {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 사용자입니다."));
 
-        user.changePassword("newPassword");
+        user.changePassword(String.valueOf(UUID.randomUUID()));
 
         return user.getPassword();
     }
