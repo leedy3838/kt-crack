@@ -45,12 +45,6 @@ public class UserController {
                 ResponseEntity.notFound().build());
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
-        userService.deleteUser(id);
-        return ResponseEntity.ok().build();
-    }
-
     @PostMapping("/login")
     public ResponseEntity<Void> login(@RequestBody LoginRequest request, HttpSession session) {
         userService.login(request, session);
@@ -60,6 +54,14 @@ public class UserController {
     @GetMapping("/logout")
     public ResponseEntity<Void> logout(HttpSession session) {
         session.invalidate(); // 세션 무효화
+        return ResponseEntity.ok().build();
+    }
+
+    @DeleteMapping("/withdraw")
+    public ResponseEntity<Void> withdraw(HttpSession session) {
+        userService.deleteUser((String) session.getAttribute("loginUser"));
+
+        session.invalidate();
         return ResponseEntity.ok().build();
     }
 }

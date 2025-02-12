@@ -33,12 +33,17 @@ public class UserService {
     }
 
     @Transactional
-    public void deleteUser(Long id) {
-        userRepository.deleteById(id);
+    public void deleteUser(String email) {
+        userRepository.findByEmail(email)
+                .ifPresentOrElse(
+                        userRepository::delete,
+                        () -> {
+                            throw new IllegalArgumentException("삭제할 사용자가 존재하지 않습니다.");
+                        });
     }
 
     public void login(LoginRequest request, HttpSession session) {
-       userRepository.findByEmailAndPassword(request.email(), request.password())
+        userRepository.findByEmailAndPassword(request.email(), request.password())
                 .orElseThrow(() -> new IllegalArgumentException("로그인 정보가 올바르지 않습니다."));
 
         session.setAttribute("loginUser", request.email());
