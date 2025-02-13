@@ -3,13 +3,13 @@ package com.kt.demo.user.service;
 import com.kt.demo.user.domain.User;
 import com.kt.demo.user.dto.request.ChangeUserInfoRequest;
 import com.kt.demo.user.dto.request.LoginRequest;
+import com.kt.demo.user.dto.request.PasswordResetRequest;
 import com.kt.demo.user.dto.response.UserInfoResponse;
 import com.kt.demo.user.exception.UserNotFoundException;
 import com.kt.demo.user.exception.errorcode.UserErrorCode;
 import com.kt.demo.user.repository.UserRepository;
 import jakarta.servlet.http.HttpSession;
 import java.util.List;
-import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -58,13 +58,13 @@ public class UserService {
     }
 
     @Transactional
-    public String resetPassword(String email) {
-        User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new UserNotFoundException(UserErrorCode.USER_NOT_FOUND));
-
-        user.changePassword(String.valueOf(UUID.randomUUID()));
-
-        return user.getPassword();
+    public void resetPassword(String email, PasswordResetRequest request) {
+        userRepository.findByEmail(email)
+                .ifPresentOrElse(
+                        user -> user.changePassword(request.password()),
+                        () -> {
+                            throw new UserNotFoundException(UserErrorCode.USER_NOT_FOUND);
+                        });
     }
 
     @Transactional

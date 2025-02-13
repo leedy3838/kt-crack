@@ -3,6 +3,7 @@ package com.kt.demo.user.controller;
 import com.kt.demo.user.domain.User;
 import com.kt.demo.user.dto.request.ChangeUserInfoRequest;
 import com.kt.demo.user.dto.request.LoginRequest;
+import com.kt.demo.user.dto.request.PasswordResetRequest;
 import com.kt.demo.user.dto.request.UserEnrollRequest;
 import com.kt.demo.user.dto.response.UserInfoResponse;
 import com.kt.demo.user.service.UserService;
@@ -82,13 +83,13 @@ public class UserController {
     }
 
     @Operation(summary = "비밀번호 리셋", description = "비밀번호 리셋")
-    @GetMapping("/reset-password")
-    public ResponseEntity<String> resetPassword(HttpSession session) {
-        String newPassword = userService.resetPassword((String) session.getAttribute("loginUser"));
+    @PutMapping("/reset-password")
+    public ResponseEntity<String> resetPassword(HttpSession session, @RequestBody PasswordResetRequest request) {
+        userService.resetPassword((String) session.getAttribute("loginUser"), request);
 
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(newPassword);
+                .build();
     }
 
     @Operation(summary = "회원 정보 수정", description = "회원 정보 수정")
