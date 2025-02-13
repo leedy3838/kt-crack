@@ -1,11 +1,11 @@
-package com.kt.demo.controller;
+package com.kt.demo.user.controller;
 
-import com.kt.demo.domain.User;
-import com.kt.demo.dto.request.ChangeUserInfoRequest;
-import com.kt.demo.dto.request.LoginRequest;
-import com.kt.demo.dto.request.UserEnrollRequest;
-import com.kt.demo.dto.response.UserInfoResponse;
-import com.kt.demo.service.UserService;
+import com.kt.demo.user.domain.User;
+import com.kt.demo.user.dto.request.ChangeUserInfoRequest;
+import com.kt.demo.user.dto.request.LoginRequest;
+import com.kt.demo.user.dto.request.UserEnrollRequest;
+import com.kt.demo.user.dto.response.UserInfoResponse;
+import com.kt.demo.user.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.servlet.http.HttpSession;
 import java.util.List;

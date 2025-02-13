@@ -1,6 +1,6 @@
-package com.kt.demo.domain;
+package com.kt.demo.user.domain;
 
-import com.kt.demo.dto.request.ChangeUserInfoRequest;
+import com.kt.demo.user.dto.request.ChangeUserInfoRequest;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -35,11 +35,15 @@ public class User {
     @Column(name = "password", nullable = false)
     private String password;
 
+    @Column(name = "phone_number")
+    private String phoneNumber;
+
     @Builder
-    public User(String name, String email, String password) {
+    public User(String name, String email, String password, String phoneNumber) {
         this.name = name;
         this.email = email;
         this.password = password;
+        this.phoneNumber = phoneNumber;
     }
 
     public void changePassword(String newPassword) {
@@ -48,5 +52,6 @@ public class User {
 
     public void changeUserInfo(ChangeUserInfoRequest request) {
         this.name = request.name();
+        this.phoneNumber = request.phoneNumber();
     }
 }

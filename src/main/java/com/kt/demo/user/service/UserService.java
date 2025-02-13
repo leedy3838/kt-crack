@@ -1,10 +1,12 @@
-package com.kt.demo.service;
+package com.kt.demo.user.service;
 
-import com.kt.demo.domain.User;
-import com.kt.demo.dto.request.ChangeUserInfoRequest;
-import com.kt.demo.dto.request.LoginRequest;
-import com.kt.demo.dto.response.UserInfoResponse;
-import com.kt.demo.repository.UserRepository;
+import com.kt.demo.user.domain.User;
+import com.kt.demo.user.dto.request.ChangeUserInfoRequest;
+import com.kt.demo.user.dto.request.LoginRequest;
+import com.kt.demo.user.dto.response.UserInfoResponse;
+import com.kt.demo.user.exception.UserNotFoundException;
+import com.kt.demo.user.exception.errorcode.UserErrorCode;
+import com.kt.demo.user.repository.UserRepository;
 import jakarta.servlet.http.HttpSession;
 import java.util.List;
 import java.util.UUID;
@@ -35,7 +37,7 @@ public class UserService {
     public UserInfoResponse getUserInfo(String email) {
         return userRepository.findByEmail(email)
                 .map(UserInfoResponse::fromEntity)
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 사용자입니다."));
+                .orElseThrow(() -> new UserNotFoundException(UserErrorCode.USER_NOT_FOUND));
     }
 
     @Transactional
@@ -44,13 +46,13 @@ public class UserService {
                 .ifPresentOrElse(
                         userRepository::delete,
                         () -> {
-                            throw new IllegalArgumentException("삭제할 사용자가 존재하지 않습니다.");
+                            throw new UserNotFoundException(UserErrorCode.USER_NOT_FOUND);
                         });
     }
 
     public void login(LoginRequest request, HttpSession session) {
         userRepository.findByEmailAndPassword(request.email(), request.password())
-                .orElseThrow(() -> new IllegalArgumentException("로그인 정보가 올바르지 않습니다."));
+                .orElseThrow(() -> new UserNotFoundException(UserErrorCode.USER_NOT_FOUND));
 
         session.setAttribute("loginUser", request.email());
     }
@@ -58,7 +60,7 @@ public class UserService {
     @Transactional
     public String resetPassword(String email) {
         User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 사용자입니다."));
+                .orElseThrow(() -> new UserNotFoundException(UserErrorCode.USER_NOT_FOUND));
 
         user.changePassword(String.valueOf(UUID.randomUUID()));
 
@@ -68,7 +70,7 @@ public class UserService {
     @Transactional
     public void changeUserInfo(String email, ChangeUserInfoRequest request) {
         User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 사용자입니다."));
+                .orElseThrow(() -> new UserNotFoundException(UserErrorCode.USER_NOT_FOUND));
 
         user.changeUserInfo(request);
     }
