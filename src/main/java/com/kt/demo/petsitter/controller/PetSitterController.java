@@ -35,8 +35,16 @@ public class PetSitterController {
     }
 
     @Operation(summary = "펫시터 프로필 상세 조회", description = "펫시터 프로필 상세 조회")
-    @GetMapping("/profile/{petSitterId}")
-    public ResponseEntity<PetSitterResponse> getProfile(HttpSession session, @PathVariable Long petSitterId) {
+    @GetMapping("/profile")
+    public ResponseEntity<PetSitterResponse> getProfile(
+            HttpSession session, @RequestParam(required = false) Long petSitterId
+    ) {
+
+        if (petSitterId == null) {
+            String email = (String) session.getAttribute("loginUser");
+            return ResponseEntity.ok(petSitterService.getProfile(email));
+        }
+
         return ResponseEntity.ok(petSitterService.getProfile(petSitterId));
     }
 

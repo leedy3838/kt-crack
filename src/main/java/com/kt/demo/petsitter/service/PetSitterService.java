@@ -57,6 +57,12 @@ public class PetSitterService {
                 .orElseThrow(() -> new PetSitterNotFoundException(PetSitterErrorCode.PET_SITTER_NOT_FOUND));
     }
 
+    public PetSitterResponse getProfile(String email) {
+        return petSitterRepository.findByUserEmail(email)
+                .map(PetSitterResponse::from)
+                .orElseThrow(() -> new PetSitterNotFoundException(PetSitterErrorCode.PET_SITTER_NOT_FOUND));
+    }
+
     @Transactional
     public PetSitterResponse updateProfile(String email, PetSitterCreateRequest request) {
         PetSitter petSitter = petSitterRepository.findByUserEmail(email)
