@@ -8,7 +8,8 @@ public record UserInfoResponse(
         Long id,
         String name,
         String email,
-        String phoneNumber
+        String phoneNumber,
+        String role
 ) {
 
     public static UserInfoResponse fromEntity(User user) {
@@ -17,6 +18,7 @@ public record UserInfoResponse(
                 .id(user.getId())
                 .email(user.getEmail())
                 .phoneNumber(user.getPhoneNumber())
+                .role(user.getRole().name())
                 .build();
     }
 }

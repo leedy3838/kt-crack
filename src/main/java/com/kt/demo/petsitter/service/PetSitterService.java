@@ -75,7 +75,7 @@ public class PetSitterService {
                 request.price()
         );
 
-        petSitterPetTypeRepository.deleteAllByIdPetSitterId(petSitter.getId());
+        petSitterPetTypeRepository.deleteByPetSitterId(petSitter.getId());
         savePetTypes(petSitter, request.petTypeIds());
 
         return PetSitterResponse.from(petSitter);
@@ -113,7 +113,7 @@ public class PetSitterService {
         PetSitter petSitter = petSitterRepository.findByUserEmail(email)
                 .orElseThrow(() -> new PetSitterNotFoundException(PetSitterErrorCode.PET_SITTER_NOT_FOUND));
 
-        petSitterPetTypeRepository.deleteAllByIdPetSitterId(petSitter.getId());
+        petSitterPetTypeRepository.deleteByPetSitterId(petSitter.getId());
         petSitterRepository.delete(petSitter);
     }
 

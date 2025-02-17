@@ -20,7 +20,7 @@ public record PetSitterStatusResponse(
             .region(petSitter.getRegion())
             .price(petSitter.getPrice())
             .availablePetTypes(petSitter.getPetSitterPetTypes().stream()
-                .map(petSitterPetType -> petSitterPetType.getId().getPetType().getName())
+                .map(petSitterPetType -> petSitterPetType.getPetType().getName())
                 .toList())
             .build();
     }

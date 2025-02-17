@@ -2,6 +2,7 @@ package com.kt.demo.user.repository.init;
 
 import com.kt.demo.global.util.DummyDataInit;
 import com.kt.demo.user.domain.User;
+import com.kt.demo.user.domain.type.Role;
 import com.kt.demo.user.repository.UserRepository;
 import java.util.ArrayList;
 import java.util.List;
@@ -28,18 +29,24 @@ public class UserInitializer implements ApplicationRunner {
 
             User user1 = User.builder()
                     .email("user1@email.com")
-                    .password("pwpw")
+                    .password("pwpw1234")
                     .name("user1")
+                    .phoneNumber("010-1234-5678")
+                    .role(Role.ADMIN)
                     .build();
             User user2 = User.builder()
                     .email("user2@email.com")
-                    .password("user2pw")
+                    .password("pwpw1234")
                     .name("user2")
+                    .phoneNumber("010-1234-5678")
+                    .role(Role.USER)
                     .build();
             User user3 = User.builder()
                     .email("user3@email.com")
-                    .password("user3pw")
+                    .password("pwpw1234")
                     .name("user3")
+                    .phoneNumber("010-1234-5678")
+                    .role(Role.USER)
                     .build();
 
             userList.add(user1);

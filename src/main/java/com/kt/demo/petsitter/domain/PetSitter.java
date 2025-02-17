@@ -1,5 +1,6 @@
 package com.kt.demo.petsitter.domain;
 
+import com.kt.demo.reservation.domain.Reservation;
 import com.kt.demo.user.domain.User;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -39,8 +40,11 @@ public class PetSitter {
     @Column(name = "price")
     private Integer price;
 
-    @OneToMany(mappedBy = "id.petSitter", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "petSitter", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<PetSitterPetType> petSitterPetTypes = new ArrayList<>();
+
+    @OneToMany(mappedBy = "petSitter", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Reservation> reservations = new ArrayList<>();
 
     @Builder
     public PetSitter(User user, String region, LocalTime availableStartTime, 

@@ -28,7 +28,7 @@ public record PetSitterResponse(
             .availableEndTime(petSitter.getAvailableEndTime())
             .price(petSitter.getPrice())
             .petTypes(petSitter.getPetSitterPetTypes().stream()
-                .map(petSitterPetType -> petSitterPetType.getId().getPetType().getName())
+                .map(petSitterPetType -> petSitterPetType.getPetType().getName())
                 .collect(Collectors.toSet()))
             .build();
     }

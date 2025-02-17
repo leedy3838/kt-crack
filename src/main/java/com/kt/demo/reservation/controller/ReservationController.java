@@ -1,11 +1,14 @@
 package com.kt.demo.reservation.controller;
 
+import com.kt.demo.global.dto.ResponseTemplate;
 import com.kt.demo.reservation.dto.request.ReservationCreateRequest;
 import com.kt.demo.reservation.dto.response.ReservationResponse;
 import com.kt.demo.reservation.service.ReservationService;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,38 +23,56 @@ public class ReservationController {
 
     @Operation(summary = "펫시터의 대기중인 예약 목록 조회", description = "펫시터의 대기중인 예약 목록 조회")
     @GetMapping("/pending")
-    public ResponseEntity<List<ReservationResponse>> getPendingReservations(HttpSession session) {
+    public ResponseEntity<ResponseTemplate<?>> getPendingReservations(HttpSession session) {
         String email = (String) session.getAttribute("loginUser");
-        return ResponseEntity.ok(reservationService.getPendingReservations(email));
+        List<ReservationResponse> reservations = reservationService.getPendingReservations(email);
+        
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(ResponseTemplate.from(reservations));
     }
 
     @Operation(summary = "펫시터의 모든 예약 목록 조회", description = "펫시터의 모든 예약 목록 조회")
     @GetMapping
-    public ResponseEntity<List<ReservationResponse>> getAllReservations(HttpSession session) {
+    public ResponseEntity<ResponseTemplate<?>> getAllReservations(HttpSession session) {
         String email = (String) session.getAttribute("loginUser");
-        return ResponseEntity.ok(reservationService.getAllReservations(email));
+        List<ReservationResponse> reservations = reservationService.getAllReservations(email);
+        
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(ResponseTemplate.from(reservations));
     }
 
     @Operation(summary = "예약 수락", description = "펫시터가 예약을 수락합니다")
     @PostMapping("/{reservationId}/accept")
-    public ResponseEntity<Void> acceptReservation(@PathVariable Long reservationId) {
+    public ResponseEntity<ResponseTemplate<?>> acceptReservation(@PathVariable Long reservationId) {
         reservationService.acceptReservation(reservationId);
-        return ResponseEntity.ok().build();
+        
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(ResponseTemplate.EMPTY_RESPONSE);
     }
 
     @Operation(summary = "예약 거절", description = "펫시터가 예약을 거절합니다")
     @PostMapping("/{reservationId}/reject")
-    public ResponseEntity<Void> rejectReservation(@PathVariable Long reservationId) {
+    public ResponseEntity<ResponseTemplate<?>> rejectReservation(@PathVariable Long reservationId) {
         reservationService.rejectReservation(reservationId);
-        return ResponseEntity.ok().build();
+        
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(ResponseTemplate.EMPTY_RESPONSE);
     }
 
     @Operation(summary = "예약 요청", description = "사용자가 펫시터에게 예약을 요청합니다")
     @PostMapping("/request")
-    public ResponseEntity<ReservationResponse> requestReservation(
-            @RequestBody ReservationCreateRequest request,
+    public ResponseEntity<ResponseTemplate<?>> requestReservation(
+            @Valid @RequestBody ReservationCreateRequest request,
             HttpSession session) {
         String email = (String) session.getAttribute("loginUser");
-        return ResponseEntity.ok(reservationService.createReservation(email, request));
+        ReservationResponse reservation = reservationService.createReservation(email, request);
+        
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(ResponseTemplate.from(reservation));
     }
 } 

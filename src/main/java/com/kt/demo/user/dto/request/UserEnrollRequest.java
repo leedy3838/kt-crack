@@ -1,6 +1,7 @@
 package com.kt.demo.user.dto.request;
 
 import com.kt.demo.user.domain.User;
+import com.kt.demo.user.domain.type.Role;
 
 public record UserEnrollRequest(
         String email,
@@ -14,6 +15,7 @@ public record UserEnrollRequest(
                 .name(name)
                 .password(password)
                 .phoneNumber(phoneNumber)
+                .role(Role.USER)
                 .build();
     }
 }
