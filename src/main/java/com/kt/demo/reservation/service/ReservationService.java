@@ -39,7 +39,7 @@ public class ReservationService {
     }
 
     public List<ReservationResponse> getAllReservations(String email) {
-        return reservationRepository.findAllByUserEmail(email)
+        return reservationRepository.findAllByPetSitterUserEmail(email)
             .stream()
             .map(ReservationResponse::from)
             .toList();
