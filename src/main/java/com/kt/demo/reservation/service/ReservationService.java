@@ -69,7 +69,10 @@ public class ReservationService {
 
         validateReservationTime(petSitter, request.startTime(), request.endTime());
 
-        Reservation reservation = request.toEntity(user, petSitter);
+        int price = petSitter.calculatePrice(request.startTime(), request.endTime());
+        Reservation reservation = request.toEntity(user, petSitter, price);
+
+
         return ReservationResponse.from(reservationRepository.save(reservation));
     }
 

@@ -8,9 +8,12 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
+
+import static java.time.temporal.ChronoUnit.MINUTES;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -27,13 +30,13 @@ public class PetSitter {
 
     @Column(name = "region")
     private String region;
-    
+
     @Column(name = "available_start_time")
     private LocalTime availableStartTime;
-    
+
     @Column(name = "available_end_time")
     private LocalTime availableEndTime;
-    
+
     @Column(name = "price")
     private Integer price;
 
@@ -48,8 +51,8 @@ public class PetSitter {
     private PetSitterStatus status;
 
     @Builder
-    public PetSitter(User user, String region, LocalTime availableStartTime, 
-                    LocalTime availableEndTime, Integer price, PetSitterStatus status) {
+    public PetSitter(User user, String region, LocalTime availableStartTime,
+                     LocalTime availableEndTime, Integer price, PetSitterStatus status) {
         this.user = user;
         this.region = region;
         this.availableStartTime = availableStartTime;
@@ -58,8 +61,8 @@ public class PetSitter {
         this.status = status != null ? status : PetSitterStatus.WAITING;
     }
 
-    public void update(String region, LocalTime availableStartTime, 
-                      LocalTime availableEndTime, Integer price) {
+    public void update(String region, LocalTime availableStartTime,
+                       LocalTime availableEndTime, Integer price) {
         this.region = region;
         this.availableStartTime = availableStartTime;
         this.availableEndTime = availableEndTime;
@@ -80,5 +83,9 @@ public class PetSitter {
 
     public void withdraw() {
         this.status = PetSitterStatus.REJECTED;
+    }
+
+    public int calculatePrice(LocalDateTime startTime, LocalDateTime endTime) {
+        return price * (int) startTime.until(endTime, MINUTES);
     }
 }

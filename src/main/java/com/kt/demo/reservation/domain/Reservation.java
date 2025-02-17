@@ -41,15 +41,18 @@ public class Reservation {
     @Column(name = "message")
     private String message;
 
+    @Column(name = "price", nullable = false)
+    private Integer price;
+
     @Builder
-    public Reservation(PetSitter petSitter, User user, LocalDateTime startTime, 
-                      LocalDateTime endTime, String message) {
+    public Reservation(PetSitter petSitter, User user, LocalDateTime startTime, LocalDateTime endTime, String message, Integer price) {
         this.petSitter = petSitter;
         this.user = user;
         this.startTime = startTime;
         this.endTime = endTime;
         this.message = message;
         this.status = ReservationStatus.PENDING;
+        this.price = price;
     }
 
     public void accept() {
@@ -58,9 +61,5 @@ public class Reservation {
 
     public void reject() {
         this.status = ReservationStatus.REJECTED;
-    }
-
-    public void complete() {
-        this.status = ReservationStatus.COMPLETED;
     }
 } 

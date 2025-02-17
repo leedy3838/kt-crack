@@ -36,34 +36,37 @@ public class ReservationInitializer implements ApplicationRunner {
 
         List<PetSitter> petSitters = petSitterRepository.findAll();
         List<User> users = userRepository.findAll();
-        
+
         List<Reservation> reservations = new ArrayList<>();
-        
+
         // 첫 번째 펫시터의 예약들
         reservations.add(Reservation.builder()
-            .petSitter(petSitters.get(2))
-            .user(users.get(0))
-            .startTime(LocalDateTime.now().plusDays(1))
-            .endTime(LocalDateTime.now().plusDays(1).plusHours(2))
-            .message("강아지 돌봄 부탁드립니다")
-            .build());
+                .petSitter(petSitters.get(2))
+                .user(users.get(0))
+                .startTime(LocalDateTime.now().plusDays(1))
+                .endTime(LocalDateTime.now().plusDays(1).plusHours(2))
+                .message("강아지 돌봄 부탁드립니다")
+                .price(10000)
+                .build());
 
         reservations.add(Reservation.builder()
-            .petSitter(petSitters.get(0))
-            .user(users.get(1))
-            .startTime(LocalDateTime.now().plusDays(2))
-            .endTime(LocalDateTime.now().plusDays(2).plusHours(3))
-            .message("고양이 돌봄 부탁드립니다")
-            .build());
+                .petSitter(petSitters.get(0))
+                .user(users.get(1))
+                .startTime(LocalDateTime.now().plusDays(2))
+                .endTime(LocalDateTime.now().plusDays(2).plusHours(3))
+                .message("고양이 돌봄 부탁드립니다")
+                .price(15000)
+                .build());
 
         // 두 번째 펫시터의 예약들
         reservations.add(Reservation.builder()
-            .petSitter(petSitters.get(1))
-            .user(users.get(2))
-            .startTime(LocalDateTime.now().plusDays(1))
-            .endTime(LocalDateTime.now().plusDays(1).plusHours(4))
-            .message("토끼 돌봄 부탁드립니다")
-            .build());
+                .petSitter(petSitters.get(1))
+                .user(users.get(2))
+                .startTime(LocalDateTime.now().plusDays(1))
+                .endTime(LocalDateTime.now().plusDays(1).plusHours(4))
+                .message("토끼 돌봄 부탁드립니다")
+                .price(20000)
+                .build());
 
         reservationRepository.saveAll(reservations);
         log.info("[Reservation]더미 데이터 생성 완료");

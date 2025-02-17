@@ -65,10 +65,10 @@ public class ReservationController {
     }
 
     @Operation(summary = "예약 요청", description = "사용자가 펫시터에게 예약을 요청합니다")
-    @PostMapping("/request")
+    @PostMapping
     public ResponseEntity<ResponseTemplate<?>> requestReservation(
-            @Valid @RequestBody ReservationCreateRequest request,
-            HttpSession session) {
+            @Valid @RequestBody ReservationCreateRequest request, HttpSession session
+    ) {
         String email = (String) session.getAttribute("loginUser");
         ReservationResponse reservation = reservationService.createReservation(email, request);
         

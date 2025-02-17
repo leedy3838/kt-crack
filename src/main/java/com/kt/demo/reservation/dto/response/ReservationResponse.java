@@ -13,7 +13,8 @@ public record ReservationResponse(
     LocalDateTime startTime,
     LocalDateTime endTime,
     ReservationStatus status,
-    String message
+    String message,
+    Integer price
 ) {
     public static ReservationResponse from(Reservation reservation) {
         return ReservationResponse.builder()
@@ -23,6 +24,7 @@ public record ReservationResponse(
             .endTime(reservation.getEndTime())
             .status(reservation.getStatus())
             .message(reservation.getMessage())
+            .price(reservation.getPrice())
             .build();
     }
 } 
