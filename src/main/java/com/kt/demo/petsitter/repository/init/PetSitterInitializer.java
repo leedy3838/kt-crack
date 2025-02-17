@@ -56,7 +56,7 @@ public class PetSitterInitializer implements ApplicationRunner {
                 .region("경기")
                 .availableStartTime(LocalTime.of(9, 0))
                 .availableEndTime(LocalTime.of(19, 0))
-                .isActivated(true)
+                .isActivated(false)
                 .build();
 
         PetSitter petSitter3 = PetSitter.builder()

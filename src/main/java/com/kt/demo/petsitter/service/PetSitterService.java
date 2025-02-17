@@ -46,7 +46,7 @@ public class PetSitterService {
     }
 
     public List<PetSitterResponse> getAllProfiles() {
-        return petSitterRepository.findAll().stream()
+        return petSitterRepository.findAllByIsActivated(true).stream()
                 .map(PetSitterResponse::from)
                 .toList();
     }
@@ -115,6 +115,24 @@ public class PetSitterService {
 
         petSitterPetTypeRepository.deleteByPetSitterId(petSitter.getId());
         petSitterRepository.delete(petSitter);
+    }
+
+    @Transactional
+    public void approvePetSitter(Long petSitterId) {
+        PetSitter petSitter = petSitterRepository.findById(petSitterId)
+                .orElseThrow(() -> new PetSitterNotFoundException(PetSitterErrorCode.PET_SITTER_NOT_FOUND));
+        
+        if (petSitter.getIsActivated()) {
+            throw new IllegalStateException("이미 승인된 펫시터입니다.");
+        }
+        
+        petSitter.activate();
+    }
+
+    public List<PetSitterStatusResponse> getPendingPetSitters() {
+        return petSitterRepository.findAllByIsActivated(false).stream()
+                .map(PetSitterStatusResponse::from)
+                .toList();
     }
 
     private void savePetTypes(PetSitter petSitter, Set<Long> petTypeIds) {

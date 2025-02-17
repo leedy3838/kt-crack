@@ -64,4 +64,8 @@ public class PetSitter {
         this.availableEndTime = availableEndTime;
         this.price = price;
     }
+
+    public void activate() {
+        this.isActivated = true;
+    }
 }
