@@ -1,6 +1,7 @@
 package com.kt.demo.petsitter.dto.request;
 
 import com.kt.demo.petsitter.domain.PetSitter;
+import com.kt.demo.petsitter.domain.PetSitterStatus;
 import com.kt.demo.user.domain.User;
 import java.time.LocalTime;
 import java.util.Set;
@@ -20,6 +21,7 @@ public record PetSitterCreateRequest(
                 .availableStartTime(availableStartTime)
                 .availableEndTime(availableEndTime)
                 .price(price)
+                .status(PetSitterStatus.WAITING)
                 .build();
     }
 } 

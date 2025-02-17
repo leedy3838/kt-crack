@@ -3,6 +3,7 @@ package com.kt.demo.petsitter.service;
 import com.kt.demo.pet.repository.PetTypeRepository;
 import com.kt.demo.petsitter.domain.PetSitter;
 import com.kt.demo.petsitter.domain.PetSitterPetType;
+import com.kt.demo.petsitter.domain.PetSitterStatus;
 import com.kt.demo.petsitter.dto.request.PetSitterCreateRequest;
 import com.kt.demo.petsitter.dto.response.PetSitterResponse;
 import com.kt.demo.petsitter.dto.response.PetSitterStatusResponse;
@@ -38,6 +39,7 @@ public class PetSitterService {
                 .orElseThrow(() -> new UserNotFoundException(UserErrorCode.USER_NOT_FOUND));
 
         PetSitter petSitter = request.toEntity(user);
+        petSitter.setStatus(PetSitterStatus.WAITING);
         petSitter = petSitterRepository.save(petSitter);
 
         savePetTypes(petSitter, request.petTypeIds());
@@ -46,7 +48,7 @@ public class PetSitterService {
     }
 
     public List<PetSitterResponse> getAllProfiles() {
-        return petSitterRepository.findAllByIsActivated(true).stream()
+        return petSitterRepository.findAllByStatus(PetSitterStatus.ACTIVATED).stream()
                 .map(PetSitterResponse::from)
                 .toList();
     }
@@ -92,7 +94,7 @@ public class PetSitterService {
 
         PetSitter petSitter = PetSitter.builder()
                 .user(user)
-                .isActivated(false)
+                .status(PetSitterStatus.WAITING)
                 .build();
 
         petSitterRepository.save(petSitter);
@@ -113,6 +115,7 @@ public class PetSitterService {
         PetSitter petSitter = petSitterRepository.findByUserEmail(email)
                 .orElseThrow(() -> new PetSitterNotFoundException(PetSitterErrorCode.PET_SITTER_NOT_FOUND));
 
+        petSitter.withdraw();
         petSitterPetTypeRepository.deleteByPetSitterId(petSitter.getId());
         petSitterRepository.delete(petSitter);
     }
@@ -122,15 +125,27 @@ public class PetSitterService {
         PetSitter petSitter = petSitterRepository.findById(petSitterId)
                 .orElseThrow(() -> new PetSitterNotFoundException(PetSitterErrorCode.PET_SITTER_NOT_FOUND));
         
-        if (petSitter.getIsActivated()) {
+        if (petSitter.getStatus() == PetSitterStatus.ACTIVATED) {
             throw new IllegalStateException("이미 승인된 펫시터입니다.");
         }
         
         petSitter.activate();
     }
 
+    @Transactional
+    public void rejectPetSitter(Long petSitterId) {
+        PetSitter petSitter = petSitterRepository.findById(petSitterId)
+                .orElseThrow(() -> new PetSitterNotFoundException(PetSitterErrorCode.PET_SITTER_NOT_FOUND));
+
+        if (petSitter.getStatus() == PetSitterStatus.ACTIVATED) {
+            throw new IllegalStateException("이미 승인된 펫시터입니다.");
+        }
+
+        petSitter.reject();
+    }
+
     public List<PetSitterStatusResponse> getPendingPetSitters() {
-        return petSitterRepository.findAllByIsActivated(false).stream()
+        return petSitterRepository.findAllByStatus(PetSitterStatus.WAITING).stream()
                 .map(PetSitterStatusResponse::from)
                 .toList();
     }

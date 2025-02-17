@@ -5,6 +5,7 @@ import com.kt.demo.pet.domain.PetType;
 import com.kt.demo.pet.repository.PetTypeRepository;
 import com.kt.demo.petsitter.domain.PetSitter;
 import com.kt.demo.petsitter.domain.PetSitterPetType;
+import com.kt.demo.petsitter.domain.PetSitterStatus;
 import com.kt.demo.petsitter.repository.PetSitterPetTypeRepository;
 import com.kt.demo.petsitter.repository.PetSitterRepository;
 import com.kt.demo.user.domain.User;
@@ -47,7 +48,7 @@ public class PetSitterInitializer implements ApplicationRunner {
                 .region("서울")
                 .availableStartTime(LocalTime.of(10, 0))
                 .availableEndTime(LocalTime.of(20, 0))
-                .isActivated(true)
+                .status(PetSitterStatus.ACTIVATED)
                 .build();
 
         PetSitter petSitter2 = PetSitter.builder()
@@ -56,7 +57,7 @@ public class PetSitterInitializer implements ApplicationRunner {
                 .region("경기")
                 .availableStartTime(LocalTime.of(9, 0))
                 .availableEndTime(LocalTime.of(19, 0))
-                .isActivated(false)
+                .status(PetSitterStatus.WAITING)
                 .build();
 
         PetSitter petSitter3 = PetSitter.builder()
@@ -65,7 +66,7 @@ public class PetSitterInitializer implements ApplicationRunner {
                 .region("인천")
                 .availableStartTime(LocalTime.of(8, 0))
                 .availableEndTime(LocalTime.of(18, 0))
-                .isActivated(true)
+                .status(PetSitterStatus.ACTIVATED)
                 .build();
 
         List<PetSitter> petSitters = List.of(petSitter1, petSitter2, petSitter3);

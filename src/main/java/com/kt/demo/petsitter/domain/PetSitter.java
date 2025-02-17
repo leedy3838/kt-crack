@@ -25,9 +25,6 @@ public class PetSitter {
     @JoinColumn(name = "user_id", unique = true)
     private User user;
 
-    @Column(name = "is_activated")
-    private Boolean isActivated;
-
     @Column(name = "region")
     private String region;
     
@@ -46,15 +43,19 @@ public class PetSitter {
     @OneToMany(mappedBy = "petSitter", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Reservation> reservations = new ArrayList<>();
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status")
+    private PetSitterStatus status;
+
     @Builder
     public PetSitter(User user, String region, LocalTime availableStartTime, 
-                    LocalTime availableEndTime, Integer price, Boolean isActivated) {
+                    LocalTime availableEndTime, Integer price, PetSitterStatus status) {
         this.user = user;
         this.region = region;
         this.availableStartTime = availableStartTime;
         this.availableEndTime = availableEndTime;
         this.price = price;
-        this.isActivated = isActivated != null ? isActivated : true;
+        this.status = status != null ? status : PetSitterStatus.WAITING;
     }
 
     public void update(String region, LocalTime availableStartTime, 
@@ -66,6 +67,18 @@ public class PetSitter {
     }
 
     public void activate() {
-        this.isActivated = true;
+        this.status = PetSitterStatus.ACTIVATED;
+    }
+
+    public void reject() {
+        this.status = PetSitterStatus.REJECTED;
+    }
+
+    public void setStatus(PetSitterStatus status) {
+        this.status = status;
+    }
+
+    public void withdraw() {
+        this.status = PetSitterStatus.REJECTED;
     }
 }

@@ -37,4 +37,14 @@ public class AdminPetSitterController {
                 .status(HttpStatus.OK)
                 .body(ResponseTemplate.EMPTY_RESPONSE);
     }
+
+    @Operation(summary = "펫시터 신청 거절", description = "펫시터 신청을 거절합니다")
+    @PostMapping("/{petSitterId}/reject")
+    public ResponseEntity<ResponseTemplate<?>> rejectPetSitter(@PathVariable Long petSitterId) {
+        petSitterService.rejectPetSitter(petSitterId);
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(ResponseTemplate.EMPTY_RESPONSE);
+    }
 } 
