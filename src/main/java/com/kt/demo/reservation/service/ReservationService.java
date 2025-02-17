@@ -85,4 +85,10 @@ public class ReservationService {
             throw new IllegalArgumentException("펫시터의 가능 시간대가 아닙니다.");
         }
     }
+
+    public List<ReservationResponse> getUserReservations(String email) {
+        return reservationRepository.findAllByPetSitterUserEmail(email).stream()
+            .map(ReservationResponse::from)
+            .toList();
+    }
 } 

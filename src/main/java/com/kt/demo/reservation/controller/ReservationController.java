@@ -75,4 +75,15 @@ public class ReservationController {
                 .status(HttpStatus.CREATED)
                 .body(ResponseTemplate.from(reservation));
     }
+
+    @Operation(summary = "사용자가 예약한 펫시터 예약 목록 조회", description = "사용자가 예약한 펫시터 예약 목록을 조회합니다")
+    @GetMapping("/my-reservations")
+    public ResponseEntity<ResponseTemplate<?>> getUserReservations(HttpSession session) {
+        String email = (String) session.getAttribute("loginUser");
+        List<ReservationResponse> reservations = reservationService.getUserReservations(email);
+        
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(ResponseTemplate.from(reservations));
+    }
 } 
