@@ -5,6 +5,7 @@ import com.kt.demo.petsitter.exception.errorcode.PetSitterErrorCode;
 import com.kt.demo.reservation.domain.Reservation;
 import com.kt.demo.reservation.domain.ReservationStatus;
 import com.kt.demo.reservation.dto.request.ReservationCreateRequest;
+import com.kt.demo.reservation.dto.response.MyReservationResponse;
 import com.kt.demo.reservation.dto.response.ReservationResponse;
 import com.kt.demo.reservation.repository.ReservationRepository;
 import com.kt.demo.user.domain.User;
@@ -38,7 +39,7 @@ public class ReservationService {
     }
 
     public List<ReservationResponse> getAllReservations(String email) {
-        return reservationRepository.findAllByPetSitterUserEmail(email)
+        return reservationRepository.findAllByUserEmail(email)
             .stream()
             .map(ReservationResponse::from)
             .toList();
@@ -86,9 +87,9 @@ public class ReservationService {
         }
     }
 
-    public List<ReservationResponse> getUserReservations(String email) {
-        return reservationRepository.findAllByPetSitterUserEmail(email).stream()
-            .map(ReservationResponse::from)
+    public List<MyReservationResponse> getUserReservations(String email) {
+        return reservationRepository.findAllByUserEmail(email).stream()
+            .map(MyReservationResponse::from)
             .toList();
     }
 } 

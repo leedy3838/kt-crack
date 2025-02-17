@@ -41,7 +41,7 @@ public class ReservationInitializer implements ApplicationRunner {
         
         // 첫 번째 펫시터의 예약들
         reservations.add(Reservation.builder()
-            .petSitter(petSitters.get(0))
+            .petSitter(petSitters.get(2))
             .user(users.get(0))
             .startTime(LocalDateTime.now().plusDays(1))
             .endTime(LocalDateTime.now().plusDays(1).plusHours(2))

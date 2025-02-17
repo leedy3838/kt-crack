@@ -8,5 +8,5 @@ import java.util.List;
 
 public interface ReservationRepository extends JpaRepository<Reservation, Long> {
     List<Reservation> findAllByPetSitterUserEmailAndStatus(String email, ReservationStatus status);
-    List<Reservation> findAllByPetSitterUserEmail(String email);
+    List<Reservation> findAllByUserEmail(String email);
 } 

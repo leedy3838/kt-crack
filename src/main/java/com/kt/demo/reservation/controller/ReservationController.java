@@ -2,6 +2,7 @@ package com.kt.demo.reservation.controller;
 
 import com.kt.demo.global.dto.ResponseTemplate;
 import com.kt.demo.reservation.dto.request.ReservationCreateRequest;
+import com.kt.demo.reservation.dto.response.MyReservationResponse;
 import com.kt.demo.reservation.dto.response.ReservationResponse;
 import com.kt.demo.reservation.service.ReservationService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -80,7 +81,7 @@ public class ReservationController {
     @GetMapping("/my-reservations")
     public ResponseEntity<ResponseTemplate<?>> getUserReservations(HttpSession session) {
         String email = (String) session.getAttribute("loginUser");
-        List<ReservationResponse> reservations = reservationService.getUserReservations(email);
+        List<MyReservationResponse> reservations = reservationService.getUserReservations(email);
         
         return ResponseEntity
                 .status(HttpStatus.OK)
