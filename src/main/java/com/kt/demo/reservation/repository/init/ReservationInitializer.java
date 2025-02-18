@@ -46,7 +46,7 @@ public class ReservationInitializer implements ApplicationRunner {
                 .startTime(LocalDateTime.now().plusDays(1))
                 .endTime(LocalDateTime.now().plusDays(1).plusHours(2))
                 .message("강아지 돌봄 부탁드립니다")
-                .price(10000)
+                .price(100)
                 .build());
 
         reservations.add(Reservation.builder()

@@ -86,6 +86,6 @@ public class PetSitter {
     }
 
     public int calculatePrice(LocalDateTime startTime, LocalDateTime endTime) {
-        return price * (int) startTime.until(endTime, MINUTES);
+        return (price * (int) startTime.until(endTime, MINUTES)) / 60;
     }
 }
