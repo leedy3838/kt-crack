@@ -1,5 +1,6 @@
 package com.kt.demo.reservation.service;
 
+import com.kt.demo.payment.repository.PaymentRepository;
 import com.kt.demo.petsitter.exception.PetSitterNotFoundException;
 import com.kt.demo.petsitter.exception.errorcode.PetSitterErrorCode;
 import com.kt.demo.reservation.domain.Reservation;
@@ -30,6 +31,7 @@ public class ReservationService {
     private final ReservationRepository reservationRepository;
     private final UserRepository userRepository;
     private final PetSitterRepository petSitterRepository;
+    private final PaymentRepository paymentRepository;
 
     public List<ReservationResponse> getPendingReservations(String email) {
         return reservationRepository.findAllByPetSitterUserEmailAndStatus(email, ReservationStatus.PENDING)
@@ -92,7 +94,7 @@ public class ReservationService {
 
     public List<MyReservationResponse> getUserReservations(String email) {
         return reservationRepository.findAllByUserEmail(email).stream()
-            .map(MyReservationResponse::from)
+            .map(reservation -> MyReservationResponse.from(reservation, paymentRepository.existsByReservationId(reservation.getId())))
             .toList();
     }
 } 

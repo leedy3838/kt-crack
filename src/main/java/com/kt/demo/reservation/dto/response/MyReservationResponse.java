@@ -14,9 +14,10 @@ public record MyReservationResponse(
     LocalDateTime endTime,
     ReservationStatus status,
     String message,
-    Integer price
+    Integer price,
+    Boolean isPayed
 ) {
-    public static MyReservationResponse from(Reservation reservation) {
+    public static MyReservationResponse from(Reservation reservation, Boolean isPayed) {
         return MyReservationResponse.builder()
             .id(reservation.getId())
             .userName(reservation.getPetSitter().getUser().getName())
@@ -25,6 +26,7 @@ public record MyReservationResponse(
             .status(reservation.getStatus())
             .message(reservation.getMessage())
             .price(reservation.getPrice())
+            .isPayed(isPayed)
             .build();
     }
 } 
