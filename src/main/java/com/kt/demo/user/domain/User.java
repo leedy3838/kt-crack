@@ -1,6 +1,7 @@
 package com.kt.demo.user.domain;
 
 import com.kt.demo.petsitter.domain.PetSitter;
+import com.kt.demo.reservation.domain.Reservation;
 import com.kt.demo.user.domain.type.Role;
 import com.kt.demo.user.dto.request.ChangeUserInfoRequest;
 import jakarta.persistence.*;
@@ -8,6 +9,8 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 @Table(name = "users", uniqueConstraints = {
         @UniqueConstraint(columnNames = {"email"})
@@ -40,6 +43,9 @@ public class User {
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private PetSitter petSitter;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Reservation> reservations;
 
     @Builder
     public User(String name, String email, String password, String phoneNumber, Role role) {
